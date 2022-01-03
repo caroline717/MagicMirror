@@ -1,4 +1,4 @@
-/config
+#/config
 /coverage
 .nyc_output
 package-lock.json
