@@ -1,0 +1,112 @@
+/*TODO customize colors 
+https://forum.magicmirror.builders/topic/14911/default-weather-module-modification-in-custom-css/4
+*/
+:root {
+  --font-primary: "Lucida Console";
+  --font-secondary: "Lucida Console";
+}
+
+.weather .weather-icon .wi-day-sunny {
+  color: #ffff00;
+}
+.weather .weather-icon .wi-day-cloudy {
+  color: #aaa;
+}
+.weather .weather-icon .wi-cloudy {
+  color: #aaa;
+}
+.weather .weather-icon .wi-cloudy-windy {
+  color: #aaa;
+}
+.weather .weather-icon .wi-showers {
+  color: #55acee;
+}
+.weather .weather-icon .wi-rain {
+  color: #55acee;
+}
+.weather .weather-icon .wi-thunderstorm {
+  color: #ff00ff;
+}
+.weather .weather-icon .wi-snow {
+  color: #fff;
+}
+.weather .weather-icon .wi-fog {
+  color: #999;
+}
+
+.weather .weather-icon .wi-night-cloudy {
+  color: #aaa;
+}
+.weather .weather-icon .wi-night-showers {
+  color: #55acee;
+}
+.weather .weather-icon .wi-night-rain {
+  color: #55acee;
+}
+.weather .weather-icon .wi-night-thunderstorm {
+  color: #ff00ff;
+}
+.weather .weather-icon .wi-night-snow {
+  color: #fff;
+}
+.weather .weather-icon .wi-night-alt-cloudy-windy {
+  color: #aaa;
+}
+
+.weather .wi-day-sunny {
+  color: #ffff00;
+}
+.weather .wi-day-cloudy {
+  color: #aaa;
+}
+.weather .wi-cloudy {
+  color: #aaa;
+}
+.weather .wi-cloudy-windy {
+  color: #aaa;
+}
+.weather .wi-showers {
+  color: #55acee;
+}
+.weather .wi-rain {
+  color: #55acee;
+}
+.weather .wi-thunderstorm {
+  color: #ff00ff;
+}
+.weather .wi-snow {
+  color: #fff;
+}
+.weather .wi-fog {
+  color: #999;
+}
+.weather .wi-night-clear {
+  color: #fff;
+}
+.weather .wi-night-cloudy {
+  color: #aaa;
+}
+.weather .wi-night-showers {
+  color: #55acee;
+}
+.weather .wi-night-rain {
+  color: #55acee;
+}
+.weather .wi-night-thunderstorm {
+  color: #ff00ff;
+}
+.weather .wi-night-snow {
+  color: #fff;
+}
+.weather .wi-night-alt-cloudy-windy {
+  color: #aaa;
+}
+.weather .wi-strong-wind {
+  color: #e0fbff;
+}
+.weather .wi-sunset {
+  color: #ffa500;
+}
+.weather .wi-sunrise {
+  color: #ffa500;
+}
