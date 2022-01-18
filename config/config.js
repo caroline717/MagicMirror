@@ -46,6 +46,14 @@ let config = {
 
 	modules: [
 		{
+			module: "MMM-MagicMover",
+			config: {
+				updateInterval: 60 * 1000,
+				ignoredRegions: [],
+				maxMove: 20
+			}
+		},
+		{
 			module: "MMM-nyc-transit",
 			position: "top_center",
 			config: {
@@ -74,20 +82,20 @@ let config = {
 			}
 		},
 		{
-			module: "MMM-MagicMover",
-			config: {
-				updateInterval: 60 * 1000,
-				ignoredRegions: [],
-				maxMove: 20
-			}
-		},
-		{
 			module: "clock",
 			position: "top_left",
 			config: {
 				timezone: "America/New_York",
 				lat: 40.73061,
 				long: -73.935242
+			}
+		},
+		{
+			module: "MMM-EyeCandy",
+			position: "bottom_left",
+			config: {
+				maxWidth: "75%",
+				ownImagePath: "https://media3.giphy.com/media/10a8AOSeP6Rqfu/200w.webp?cid=ecf05e479jxszpafblki8ps8aan71zevv6xw43lvtnk4efes&rid=200w.webp&ct=s" // ex: 'modules/MMM-EyeCandy/pix/YOUR_PICTURE_NAME.jpg', or internet url to image
 			}
 		},
 		{
