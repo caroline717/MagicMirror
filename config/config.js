@@ -55,7 +55,7 @@ let config = {
 		},
 		{
 			module: "MMM-nyc-transit",
-			position: "bottom_right",
+			position: "top_right",
 			config: {
 				apiKey: "BwwV0Kn7Gs6fWzypayNsA56X67Cpb96Fa4RiFMiK",
 				displayType: "list",
@@ -92,33 +92,15 @@ let config = {
 		},
 		{
 			module: "MMM-EyeCandy",
-			position: "bottom_left",
+			position: "bottom_right",
 			config: {
 				maxWidth: "75%",
 				ownImagePath: "https://media3.giphy.com/media/10a8AOSeP6Rqfu/200w.webp?cid=ecf05e479jxszpafblki8ps8aan71zevv6xw43lvtnk4efes&rid=200w.webp&ct=s" // ex: 'modules/MMM-EyeCandy/pix/YOUR_PICTURE_NAME.jpg', or internet url to image
 			}
 		},
 		{
-			module: "calendar",
-			header: "US Holidays",
-			position: "top_left",
-			config: {
-				customEvents: [{ keyword: "Birthday", symbol: "birthday-cake", color: primaryColor }],
-				maximumEntries: 5,
-				colored: true,
-				coloredSymbolOnly: true,
-				calendars: [
-					{
-						color: primaryColor,
-						symbol: "star",
-						url: "webcal://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics"
-					}
-				]
-			}
-		},
-		{
 			module: "compliments",
-			position: "bottom_bar",
+			position: "bottom_center",
 			config: {
 				compliments: {
 					morning: ["Good morning, Mackenzie!", "Enjoy your day!", "How was your sleep?", "I love you!"],
@@ -134,7 +116,7 @@ let config = {
 		//Current
 		{
 			module: "weather",
-			position: "top_right",
+			position: "top_left",
 			config: {
 				weatherProvider: "openweathermap",
 				type: "current",
@@ -148,7 +130,7 @@ let config = {
 		//Forecast
 		{
 			module: "weather",
-			position: "top_right",
+			position: "bottom_left",
 			header: "Weather Forecast",
 			config: {
 				weatherProvider: "openweathermap",
@@ -157,11 +139,29 @@ let config = {
 				degreeLabel: true,
 				colored: "true",
 				maxEntries: 10,
-				maxNumberOfDays: 8,
+				maxNumberOfDays: 5,
 				location: "New York",
 				locationID: "5128581", //ID from http://bulk.openweathermap.org/sample/city.list.json.gz; unzip the gz file and find your city
 				apiKey: "6d6c368ecd4b4df1e5029b59e557e8a6",
 				initialLoadDelay: 1000 //Added because two differnent modules share a key
+			}
+		},
+		{
+			module: "calendar",
+			header: "US Holidays",
+			position: "bottom_left",
+			config: {
+				customEvents: [{ keyword: "Birthday", symbol: "birthday-cake", color: primaryColor }],
+				maximumEntries: 3,
+				colored: true,
+				coloredSymbolOnly: true,
+				calendars: [
+					{
+						color: primaryColor,
+						symbol: "star",
+						url: "webcal://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics"
+					}
+				]
 			}
 		}
 	]
