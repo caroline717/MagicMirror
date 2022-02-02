@@ -55,7 +55,7 @@ let config = {
 		},
 		{
 			module: "MMM-nyc-transit",
-			position: "top_center",
+			position: "bottom_right",
 			config: {
 				apiKey: "BwwV0Kn7Gs6fWzypayNsA56X67Cpb96Fa4RiFMiK",
 				displayType: "list",
