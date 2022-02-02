@@ -38,7 +38,7 @@ let config = {
 	logLevel: ["INFO", "LOG", "WARN", "ERROR"], // Add "DEBUG" for even more logging
 	timeFormat: 12,
 	units: "imperial",
-	// serverOnly:  true/false/"local" ,
+	// serverOnly:  true/false/"local"
 	// local for armv6l processors, default
 	//   starts serveronly and then starts chrome browser
 	// false, default for all NON-armv6l devices
