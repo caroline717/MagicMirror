@@ -130,7 +130,7 @@ let config = {
 		//Forecast
 		{
 			module: "weather",
-			position: "bottom_left",
+			position: "top_left",
 			header: "Weather Forecast",
 			config: {
 				weatherProvider: "openweathermap",
@@ -149,7 +149,7 @@ let config = {
 		{
 			module: "calendar",
 			header: "US Holidays",
-			position: "bottom_left",
+			position: "top_left",
 			config: {
 				customEvents: [{ keyword: "Birthday", symbol: "birthday-cake", color: primaryColor }],
 				maximumEntries: 3,
