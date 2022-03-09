@@ -69,8 +69,5 @@ Temporary Items
 *.bak
 
 .env
-<<<<<<< HEAD
-=======
 
 core.txt
->>>>>>> 27296d018bd41859bfde4ec857e59ca566ebf73e
