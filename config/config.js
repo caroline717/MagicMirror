@@ -1,182 +1,22 @@
-/* Magic Mirror Config Sample
+/* Magic Mirror Test config default weather
  *
- * By Michael Teeuw https://michaelteeuw.nl
+ * By rejas
  * MIT Licensed.
- *
- * For more information on how you can configure this file
- * see https://docs.magicmirror.builders/getting-started/configuration.html#general
- * and https://docs.magicmirror.builders/modules/configuration.html
  */
-
-//TODO: Add birthday to calendar
-//https://forum.magicmirror.builders/topic/9092/birthday-calendar-and-appointments/7
-//TODO: Pick custom modules
-
-let primaryColor = "#ffbfc9";
-
 let config = {
-	address: "localhost", // Address to listen on, can be:
-	// - "localhost", "127.0.0.1", "::1" to listen on loopback interface
-	// - another specific IPv4/6 to listen on a specific interface
-	// - "0.0.0.0", "::" to listen on any interface
-	// Default, when address config is left out or empty, is "localhost"
-	port: 3000,
-	basePath: "/", // The URL path where MagicMirror is hosted. If you are using a Reverse proxy
-	// you must set the sub path here. basePath must end with a /
-	ipWhitelist: ["127.0.0.1", "::ffff:127.0.0.1", "::1"], // Set [] to allow all IP addresses
-	// or add a specific IPv4 of 192.168.1.5 :
-	// ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.1.5"],
-	// or IPv4 range of 192.168.3.0 --> 192.168.3.15 use CIDR format :
-	// ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.3.0/28"],
-
-	useHttps: false, // Support HTTPS or not, default "false" will use HTTP
-	httpsPrivateKey: "", // HTTPS private key path, only require when useHttps is true
-	httpsCertificate: "", // HTTPS Certificate path, only require when useHttps is true
-
-	language: "en",
-	locale: "en-US",
-	logLevel: ["INFO", "LOG", "WARN", "ERROR"], // Add "DEBUG" for even more logging
-	timeFormat: 12,
 	units: "imperial",
-	// serverOnly:  true/false/"local"
-	// local for armv6l processors, default
-	//   starts serveronly and then starts chrome browser
-	// false, default for all NON-armv6l devices
-	// true, force serveronly mode, because you want to.. no UI on this device
 
 	modules: [
 		{
-			module: "MMM-Remote-Control",
-			// uncomment the following line to show the URL of the remote control on the mirror
-			// position: 'bottom_left',
-			// you can hide this module afterwards from the remote control itself
-			config: {
-				customCommand: {}, // Optional, See "Using Custom Commands" below
-				showModuleApiMenu: true, // Optional, Enable the Module Controls menu
-				secureEndpoints: true // Optional, See API/README.md
-				// uncomment any of the lines below if you're gonna use it
-				// customMenu: "custom_menu.json", // Optional, See "Custom Menu Items" below
-				// apiKey: "", // Optional, See API/README.md for details
-				// classes: {} // Optional, See "Custom Classes" below
-			}
-		},
-		{
-			module: "MMM-MagicMover",
-			config: {
-				updateInterval: 60 * 1000,
-				ignoredRegions: [],
-				maxMove: 20
-			}
-		},
-		{
-			module: "MMM-nyc-transit",
-			position: "top_right",
-			config: {
-				apiKey: "BwwV0Kn7Gs6fWzypayNsA56X67Cpb96Fa4RiFMiK",
-				displayType: "list",
-				mtaType: "train",
-				stations: [
-					{
-						stationId: 301,
-						walkingTime: 5,
-						dir: {
-							upTown: false,
-							downTown: true
-						}
-					},
-					{
-						stationId: 146,
-						walkingTime: 5,
-						dir: {
-							upTown: false,
-							downTown: true
-						}
-					}
-				],
-				updateInterval: 300000
-			}
-		},
-		{
-			module: "clock",
-			position: "top_left",
-			config: {
-				timezone: "America/New_York",
-				lat: 40.73061,
-				long: -73.935242
-			}
-		},
-		{
-			module: "MMM-EyeCandy",
-			position: "bottom_right",
-			config: {
-				maxWidth: "75%",
-				ownImagePath: "https://media3.giphy.com/media/10a8AOSeP6Rqfu/200w.webp?cid=ecf05e479jxszpafblki8ps8aan71zevv6xw43lvtnk4efes&rid=200w.webp&ct=s" // ex: 'modules/MMM-EyeCandy/pix/YOUR_PICTURE_NAME.jpg', or internet url to image
-			}
-		},
-		{
-			module: "compliments",
-			position: "bottom_center",
-			config: {
-				compliments: {
-					morning: ["Good morning, Mackenzie!", "Enjoy your day!", "How was your sleep?", "I love you!"],
-					afternoon: ["Hello, Mackenzie!", "I love you!"],
-					evening: ["Good Evening, Mackenzie!", "Sleep well!", "I love you!"],
-					"....-01-01": ["Happy new year!"],
-					"....-01-09": ["Happy Birthday!"],
-					"....-10-31": ["Happy Halloween!"],
-					"....-12-25": ["Merry Christmas!"]
-				}
-			}
-		},
-		//Current
-		{
 			module: "weather",
-			position: "top_left",
+			position: "bottom_bar",
 			config: {
-				weatherProvider: "openweathermap",
-				type: "current",
-				roundTemp: true,
-				degreeLabel: true,
-				location: "New York",
-				locationID: "5128581", //ID from http://bulk.openweathermap.org/sample/city.list.json.gz; unzip the gz file and find your city
-				apiKey: "6d6c368ecd4b4df1e5029b59e557e8a6"
-			}
-		},
-		//Forecast
-		{
-			module: "weather",
-			position: "top_left",
-			header: "Weather Forecast",
-			config: {
-				weatherProvider: "openweathermap",
 				type: "forecast",
-				roundTemp: true,
-				degreeLabel: true,
-				colored: "true",
-				maxEntries: 10,
-				maxNumberOfDays: 5,
-				location: "New York",
-				locationID: "5128581", //ID from http://bulk.openweathermap.org/sample/city.list.json.gz; unzip the gz file and find your city
-				apiKey: "6d6c368ecd4b4df1e5029b59e557e8a6",
-				initialLoadDelay: 1000 //Added because two differnent modules share a key
-			}
-		},
-		{
-			module: "calendar",
-			header: "US Holidays",
-			position: "top_left",
-			config: {
-				customEvents: [{ keyword: "Birthday", symbol: "birthday-cake", color: primaryColor }],
-				maximumEntries: 3,
-				colored: true,
-				coloredSymbolOnly: true,
-				calendars: [
-					{
-						color: primaryColor,
-						symbol: "star",
-						url: "webcal://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics"
-					}
-				]
+				location: "Munich",
+				mockData:
+					'"{"city":{"id":2867714,"name":"Munich","coord":{"lon":11.5754,"lat":48.1371},"country":"DE","population":1260391,"timezone":7200},"cod":"200","message":0.9653487,"cnt":7,"list":[{"dt":1568372400,"sunrise":1568350044,"sunset":1568395948,"temp":{"day":24.44,"min":15.35,"max":24.44,"night":15.35,"eve":18,"morn":23.03},"pressure":1031.65,"humidity":70,"weather":[{"id":801,"main":"Clouds","description":"few clouds","icon":"02d"}],"speed":3.35,"deg":314,"clouds":21},{"dt":1568458800,"sunrise":1568436525,"sunset":1568482223,"temp":{"day":20.81,"min":13.56,"max":21.02,"night":13.56,"eve":16.6,"morn":15.88},"pressure":1028.81,"humidity":72,"weather":[{"id":500,"main":"Rain","description":"light rain","icon":"10d"}],"speed":2.21,"deg":81,"clouds":100},{"dt":1568545200,"sunrise":1568523007,"sunset":1568568497,"temp":{"day":22.65,"min":13.76,"max":22.88,"night":15.27,"eve":17.45,"morn":13.76},"pressure":1023.75,"humidity":64,"weather":[{"id":800,"main":"Clear","description":"sky is clear","icon":"01d"}],"speed":1.15,"deg":7,"clouds":0},{"dt":1568631600,"sunrise":1568609489,"sunset":1568654771,"temp":{"day":23.45,"min":13.95,"max":23.45,"night":13.95,"eve":17.75,"morn":15.21},"pressure":1020.41,"humidity":64,"weather":[{"id":800,"main":"Clear","description":"sky is clear","icon":"01d"}],"speed":3.07,"deg":298,"clouds":7},{"dt":1568718000,"sunrise":1568695970,"sunset":1568741045,"temp":{"day":20.55,"min":10.95,"max":20.55,"night":10.95,"eve":14.82,"morn":13.24},"pressure":1019.4,"humidity":66,"weather":[{"id":800,"main":"Clear","description":"sky is clear","icon":"01d"}],"speed":2.8,"deg":333,"clouds":2},{"dt":1568804400,"sunrise":1568782452,"sunset":1568827319,"temp":{"day":18.15,"min":7.75,"max":18.15,"night":7.75,"eve":12.45,"morn":9.41},"pressure":1017.56,"humidity":52,"weather":[{"id":800,"main":"Clear","description":"sky is clear","icon":"01d"}],"speed":2.92,"deg":34,"clouds":0},{"dt":1568890800,"sunrise":1568868934,"sunset":1568913593,"temp":{"day":14.85,"min":5.56,"max":15.05,"night":5.56,"eve":9.56,"morn":6.25},"pressure":1022.7,"humidity":59,"weather":[{"id":800,"main":"Clear","description":"sky is clear","icon":"01d"}],"speed":2.89,"deg":51,"clouds":1}]}"',
+				weatherEndpoint: "/forecast/daily",
+				decimalSymbol: "_"
 			}
 		}
 	]

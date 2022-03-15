@@ -2,12 +2,13 @@
 	"extends": ["eslint:recommended", "plugin:prettier/recommended", "plugin:jsdoc/recommended"],
 	"plugins": ["prettier", "jsdoc", "jest"],
 	"env": {
+		"node": true,
 		"browser": true,
 		"es6": true,
-		"jest/globals": true,
-		"node": true
+		"jest/globals": true
 	},
 	"globals": {
+		"process": true,
 		"config": true,
 		"Log": true,
 		"MM": true,
