@@ -46,6 +46,26 @@ let config = {
 
 	modules: [
 		{
+			module: "MMM-TelegramBot",
+			position: "top_center",
+			config: {
+				telegramAPIKey: "5247145464:AAHEUk-GsmdGBHXFfcm1TUIN8y3-zUqMdko",
+				allowedUser: ["carfairhurst", "MacksMMBot"], // This is NOT the username of bot.
+				adminChatId: 5211047201,
+				useWelcomeMessage: true,
+				favourites: ["/commands", "/modules", "/hideall", "/showall"],
+				telecast: true, // true or chat_id
+				telecastLife: 1000 * 60 * 60 * 6,
+				telecastLimit: 1,
+				telecastHideOverflow: true,
+				commandAllowed: {},
+				useSoundNotification: true,
+				dateFormat: "DD-MM-YYYY HH:mm:ss",
+				telecastContainer: 300,
+				TelegramBotServiceAlerte: true
+			}
+		},
+		{
 			module: "MMM-Remote-Control",
 			// uncomment the following line to show the URL of the remote control on the mirror
 			// position: 'bottom_left',
