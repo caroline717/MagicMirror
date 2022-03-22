@@ -46,8 +46,36 @@ let config = {
 
 	modules: [
 		{
+			module: "MMM-nyc-transit",
+			position: "top_right",
+			config: {
+				apiKey: "BwwV0Kn7Gs6fWzypayNsA56X67Cpb96Fa4RiFMiK",
+				displayType: "list",
+				mtaType: "train",
+				stations: [
+					{
+						stationId: 301,
+						walkingTime: 5,
+						dir: {
+							upTown: false,
+							downTown: true
+						}
+					},
+					{
+						stationId: 146,
+						walkingTime: 5,
+						dir: {
+							upTown: false,
+							downTown: true
+						}
+					}
+				],
+				updateInterval: 300000
+			}
+		},
+		{
 			module: "MMM-TelegramBot",
-			position: "top_center",
+			position: "top_right",
 			config: {
 				telegramAPIKey: "5247145464:AAHEUk-GsmdGBHXFfcm1TUIN8y3-zUqMdko",
 				allowedUser: ["carfairhurst", "MacksMMBot"], // This is NOT the username of bot.
@@ -86,34 +114,6 @@ let config = {
 				updateInterval: 60 * 1000,
 				ignoredRegions: [],
 				maxMove: 20
-			}
-		},
-		{
-			module: "MMM-nyc-transit",
-			position: "top_right",
-			config: {
-				apiKey: "BwwV0Kn7Gs6fWzypayNsA56X67Cpb96Fa4RiFMiK",
-				displayType: "list",
-				mtaType: "train",
-				stations: [
-					{
-						stationId: 301,
-						walkingTime: 5,
-						dir: {
-							upTown: false,
-							downTown: true
-						}
-					},
-					{
-						stationId: 146,
-						walkingTime: 5,
-						dir: {
-							upTown: false,
-							downTown: true
-						}
-					}
-				],
-				updateInterval: 300000
 			}
 		},
 		{
