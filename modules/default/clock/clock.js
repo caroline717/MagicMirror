@@ -1,6 +1,6 @@
 /* global SunCalc */
 
-/* Magic Mirror
+/* MagicMirror²
  * Module: Clock
  *
  * By Michael Teeuw https://michaelteeuw.nl
@@ -199,13 +199,13 @@ Module.register("clock", {
 			sunWrapper.innerHTML =
 				'<span class="' +
 				(isVisible ? "bright" : "") +
-				'"><i class="fa fa-sun-o" aria-hidden="true"></i> ' +
+				'"><i class="fas fa-sun" aria-hidden="true"></i> ' +
 				untilNextEventString +
 				"</span>" +
-				'<span><i class="fa fa-arrow-up" aria-hidden="true"></i> ' +
+				'<span><i class="fas fa-arrow-up" aria-hidden="true"></i> ' +
 				formatTime(this.config, sunTimes.sunrise) +
 				"</span>" +
-				'<span><i class="fa fa-arrow-down" aria-hidden="true"></i> ' +
+				'<span><i class="fas fa-arrow-down" aria-hidden="true"></i> ' +
 				formatTime(this.config, sunTimes.sunset) +
 				"</span>";
 			digitalWrapper.appendChild(sunWrapper);
@@ -230,13 +230,13 @@ Module.register("clock", {
 			moonWrapper.innerHTML =
 				'<span class="' +
 				(isVisible ? "bright" : "") +
-				'"><i class="fa fa-moon-o" aria-hidden="true"></i> ' +
+				'"><i class="fas fa-moon" aria-hidden="true"></i> ' +
 				illuminatedFractionString +
 				"</span>" +
-				'<span><i class="fa fa-arrow-up" aria-hidden="true"></i> ' +
+				'<span><i class="fas fa-arrow-up" aria-hidden="true"></i> ' +
 				(moonRise ? formatTime(this.config, moonRise) : "...") +
 				"</span>" +
-				'<span><i class="fa fa-arrow-down" aria-hidden="true"></i> ' +
+				'<span><i class="fas fa-arrow-down" aria-hidden="true"></i> ' +
 				(moonSet ? formatTime(this.config, moonSet) : "...") +
 				"</span>";
 			digitalWrapper.appendChild(moonWrapper);
@@ -303,7 +303,7 @@ Module.register("clock", {
 		}
 
 		/*******************************************
-		 * Update placement, respect old analogShowDate even if its not needed anymore
+		 * Update placement, respect old analogShowDate even if it's not needed anymore
 		 */
 		if (this.config.displayType === "analog") {
 			// Display only an analog clock
@@ -311,15 +311,15 @@ Module.register("clock", {
 				wrapper.classList.add("clockGrid--bottom");
 			} else if (this.config.analogShowDate === "bottom") {
 				wrapper.classList.add("clockGrid--top");
-			} else {
-				//analogWrapper.style.gridArea = "center";
 			}
+			wrapper.appendChild(analogWrapper);
+		} else if (this.config.displayType === "digital") {
+			wrapper.appendChild(digitalWrapper);
 		} else if (this.config.displayType === "both") {
 			wrapper.classList.add("clockGrid--" + this.config.analogPlacement);
+			wrapper.appendChild(analogWrapper);
+			wrapper.appendChild(digitalWrapper);
 		}
-
-		wrapper.appendChild(analogWrapper);
-		wrapper.appendChild(digitalWrapper);
 
 		// Return the wrapper to the dom.
 		return wrapper;

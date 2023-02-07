@@ -1,4 +1,4 @@
-/* Magic Mirror Test config newsfeed module
+/* MagicMirror² Test config newsfeed module
  *
  * MIT Licensed.
  */
@@ -13,7 +13,7 @@ let config = {
 				feeds: [
 					{
 						title: "Rodrigo Ramirez Blog",
-						url: "http://localhost:8080/tests/configs/data/feed_test_rodrigoramirez.xml"
+						url: "http://localhost:8080/tests/mocks/newsfeed_test.xml"
 					}
 				],
 				ignoreOldItems: true

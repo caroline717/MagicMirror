@@ -81,12 +81,12 @@ let config = {
 			module: "MMM-nyc-transit",
 			position: "top_left",
 			config: {
-				apiKey: "BwwV0Kn7Gs6fWzypayNsA56X67Cpb96Fa4RiFMiK",
+				apiKey: "AMoJyyMMAuLgvsq42CUCauF9TJZvaxI6dRiQbNfe",
 				displayType: "list",
 				mtaType: "train",
 				stations: [
 					{
-						stationId: 301,
+						stationId: 304,
 						walkingTime: 5,
 						dir: {
 							upTown: false,
@@ -94,7 +94,15 @@ let config = {
 						}
 					},
 					{
-						stationId: 146,
+						stationId: 151,
+						walkingTime: 5,
+						dir: {
+							upTown: false,
+							downTown: true
+						}
+					},
+					{
+						stationId: 437,
 						walkingTime: 5,
 						dir: {
 							upTown: false,

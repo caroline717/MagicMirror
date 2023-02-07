@@ -1,5 +1,5 @@
 {
-	"LOADING": "Načítání &hellip;",
+	"LOADING": "Načítání …",
 
 	"TODAY": "Dnes",
 	"TOMORROW": "Zítra",
@@ -24,6 +24,11 @@
 	"WNW": "ZSZ",
 	"NW": "SZ",
 	"NNW": "SSZ",
+
+	"FEELS": "Pocitově {DEGREE}",
+	"PRECIP": "Pravděpodobnost deště",
+
+	"NEWSFEED_NO_ITEMS": "Žádné zprávy.",
 
 	"UPDATE_NOTIFICATION": "Dostupná aktualizace pro MagicMirror².",
 	"UPDATE_NOTIFICATION_MODULE": "Dostupná aktualizace pro modul {MODULE_NAME}.",

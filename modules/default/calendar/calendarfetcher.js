@@ -1,4 +1,4 @@
-/* Magic Mirror
+/* MagicMirror²
  * Node Helper: Calendar - CalendarFetcher
  *
  * By Michael Teeuw https://michaelteeuw.nl
@@ -8,7 +8,7 @@ const CalendarUtils = require("./calendarutils");
 const Log = require("logger");
 const NodeHelper = require("node_helper");
 const ical = require("node-ical");
-const fetch = require("node-fetch");
+const fetch = require("fetch");
 const digest = require("digest-fetch");
 const https = require("https");
 

@@ -1,16 +1,16 @@
-const helpers = require("../global-setup");
+const helpers = require("../helpers/global-setup");
 
-describe("Alert module", function () {
-	beforeAll(function (done) {
-		helpers.startApplication("tests/configs/modules/alert/default.js");
-		helpers.getDocument(done, 3000);
+describe("Alert module", () => {
+	beforeAll(async () => {
+		await helpers.startApplication("tests/configs/modules/alert/default.js");
+		await helpers.getDocument();
 	});
-	afterAll(function () {
-		helpers.stopApplication();
+	afterAll(async () => {
+		await helpers.stopApplication();
 	});
 
-	it("should show the welcome message", function () {
-		const elem = document.querySelector(".ns-box .ns-box-inner .light.bright.small");
+	it("should show the welcome message", async () => {
+		const elem = await helpers.waitForElement(".ns-box .ns-box-inner .light.bright.small");
 		expect(elem).not.toBe(null);
 		expect(elem.textContent).toContain("Welcome, start was successful!");
 	});

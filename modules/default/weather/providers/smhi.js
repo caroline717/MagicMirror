@@ -1,6 +1,6 @@
 /* global WeatherProvider, WeatherObject */
 
-/* Magic Mirror
+/* MagicMirror²
  * Module: Weather
  * Provider: SMHI
  *
@@ -15,21 +15,22 @@ WeatherProvider.register("smhi", {
 
 	// Set the default config properties that is specific to this provider
 	defaults: {
-		lat: 0,
-		lon: 0,
-		precipitationValue: "pmedian"
+		lat: 0, // Cant have more than 6 digits
+		lon: 0, // Cant have more than 6 digits
+		precipitationValue: "pmedian",
+		location: false
 	},
 
 	/**
-	 * Implements method in interface for fetching current weather
+	 * Implements method in interface for fetching current weather.
 	 */
 	fetchCurrentWeather() {
 		this.fetchData(this.getURL())
 			.then((data) => {
-				let closest = this.getClosestToCurrentTime(data.timeSeries);
-				let coordinates = this.resolveCoordinates(data);
-				let weatherObject = this.convertWeatherDataToObject(closest, coordinates);
-				this.setFetchedLocation(`(${coordinates.lat},${coordinates.lon})`);
+				const closest = this.getClosestToCurrentTime(data.timeSeries);
+				const coordinates = this.resolveCoordinates(data);
+				const weatherObject = this.convertWeatherDataToObject(closest, coordinates);
+				this.setFetchedLocation(this.config.location || `(${coordinates.lat},${coordinates.lon})`);
 				this.setCurrentWeather(weatherObject);
 			})
 			.catch((error) => Log.error("Could not load data: " + error.message))
@@ -37,16 +38,30 @@ WeatherProvider.register("smhi", {
 	},
 
 	/**
-	 * Implements method in interface for fetching a forecast.
-	 * Handling hourly forecast would be easy as not grouping by day but it seems really specific for one weather provider for now.
+	 * Implements method in interface for fetching a multi-day forecast.
 	 */
 	fetchWeatherForecast() {
 		this.fetchData(this.getURL())
 			.then((data) => {
-				let coordinates = this.resolveCoordinates(data);
-				let weatherObjects = this.convertWeatherDataGroupedByDay(data.timeSeries, coordinates);
-				this.setFetchedLocation(`(${coordinates.lat},${coordinates.lon})`);
+				const coordinates = this.resolveCoordinates(data);
+				const weatherObjects = this.convertWeatherDataGroupedBy(data.timeSeries, coordinates);
+				this.setFetchedLocation(this.config.location || `(${coordinates.lat},${coordinates.lon})`);
 				this.setWeatherForecast(weatherObjects);
+			})
+			.catch((error) => Log.error("Could not load data: " + error.message))
+			.finally(() => this.updateAvailable());
+	},
+
+	/**
+	 * Implements method in interface for fetching hourly forecasts.
+	 */
+	fetchWeatherHourly() {
+		this.fetchData(this.getURL())
+			.then((data) => {
+				const coordinates = this.resolveCoordinates(data);
+				const weatherObjects = this.convertWeatherDataGroupedBy(data.timeSeries, coordinates, "hour");
+				this.setFetchedLocation(this.config.location || `(${coordinates.lat},${coordinates.lon})`);
+				this.setWeatherHourly(weatherObjects);
 			})
 			.catch((error) => Log.error("Could not load data: " + error.message))
 			.finally(() => this.updateAvailable());
@@ -60,7 +75,7 @@ WeatherProvider.register("smhi", {
 	setConfig(config) {
 		this.config = config;
 		if (!config.precipitationValue || ["pmin", "pmean", "pmedian", "pmax"].indexOf(config.precipitationValue) === -1) {
-			console.log("invalid or not set: " + config.precipitationValue);
+			Log.log("invalid or not set: " + config.precipitationValue);
 			config.precipitationValue = this.defaults.precipitationValue;
 		}
 	},
@@ -89,9 +104,28 @@ WeatherProvider.register("smhi", {
 	 * @returns {string} the url for the specified coordinates
 	 */
 	getURL() {
-		let lon = this.config.lon;
-		let lat = this.config.lat;
+		const formatter = new Intl.NumberFormat("en-US", {
+			minimumFractionDigits: 6,
+			maximumFractionDigits: 6
+		});
+		const lon = formatter.format(this.config.lon);
+		const lat = formatter.format(this.config.lat);
 		return `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${lon}/lat/${lat}/data.json`;
+	},
+
+	/**
+	 * Calculates the apparent temperature based on known atmospheric data.
+	 *
+	 * @param {object} weatherData Weatherdata to use for the calculation
+	 * @returns {number} The apparent temperature
+	 */
+	calculateApparentTemperature(weatherData) {
+		const Ta = this.paramValue(weatherData, "t");
+		const rh = this.paramValue(weatherData, "r");
+		const ws = this.paramValue(weatherData, "ws");
+		const p = (rh / 100) * 6.105 * Math.E * ((17.27 * Ta) / (237.7 + Ta));
+
+		return Ta + 0.33 * p - 0.7 * ws - 4;
 	},
 
 	/**
@@ -104,8 +138,7 @@ WeatherProvider.register("smhi", {
 	 * @returns {WeatherObject} The converted weatherdata at the specified location
 	 */
 	convertWeatherDataToObject(weatherData, coordinates) {
-		// Weather data is only for Sweden and nobody in Sweden would use imperial
-		let currentWeather = new WeatherObject("metric", "metric", "metric");
+		let currentWeather = new WeatherObject();
 
 		currentWeather.date = moment(weatherData.validTime);
 		currentWeather.updateSunTime(coordinates.lat, coordinates.lon);
@@ -114,6 +147,7 @@ WeatherProvider.register("smhi", {
 		currentWeather.windSpeed = this.paramValue(weatherData, "ws");
 		currentWeather.windDirection = this.paramValue(weatherData, "wd");
 		currentWeather.weatherType = this.convertWeatherType(this.paramValue(weatherData, "Wsymb2"), currentWeather.isDayTime());
+		currentWeather.feelsLikeTemp = this.calculateApparentTemperature(weatherData);
 
 		// Determine the precipitation amount and category and update the
 		// weatherObject with it, the valuetype to use can be configured or uses
@@ -143,13 +177,14 @@ WeatherProvider.register("smhi", {
 	},
 
 	/**
-	 * Takes all of the data points and converts it to one WeatherObject per day.
+	 * Takes all the data points and converts it to one WeatherObject per day.
 	 *
 	 * @param {object[]} allWeatherData Array of weatherdata
 	 * @param {object} coordinates Coordinates of the locations of the weather
+	 * @param {string} groupBy The interval to use for grouping the data (day, hour)
 	 * @returns {WeatherObject[]} Array of weatherobjects
 	 */
-	convertWeatherDataGroupedByDay(allWeatherData, coordinates) {
+	convertWeatherDataGroupedBy(allWeatherData, coordinates, groupBy = "day") {
 		let currentWeather;
 		let result = [];
 
@@ -157,10 +192,11 @@ WeatherProvider.register("smhi", {
 		let dayWeatherTypes = [];
 
 		for (const weatherObject of allWeatherObjects) {
-			//If its the first object or if a day change we need to reset the summary object
-			if (!currentWeather || !currentWeather.date.isSame(weatherObject.date, "day")) {
-				currentWeather = new WeatherObject(this.config.units, this.config.tempUnits, this.config.windUnits);
+			//If its the first object or if a day/hour change we need to reset the summary object
+			if (!currentWeather || !currentWeather.date.isSame(weatherObject.date, groupBy)) {
+				currentWeather = new WeatherObject();
 				dayWeatherTypes = [];
+				currentWeather.temperature = weatherObject.temperature;
 				currentWeather.date = weatherObject.date;
 				currentWeather.minTemperature = Infinity;
 				currentWeather.maxTemperature = -Infinity;
@@ -170,7 +206,7 @@ WeatherProvider.register("smhi", {
 				result.push(currentWeather);
 			}
 
-			//Keep track of what icons has been used for each hour of daytime and use the middle one for the forecast
+			//Keep track of what icons have been used for each hour of daytime and use the middle one for the forecast
 			if (weatherObject.isDayTime()) {
 				dayWeatherTypes.push(weatherObject.weatherType);
 			}
@@ -237,8 +273,8 @@ WeatherProvider.register("smhi", {
 	},
 
 	/**
-	 * Map the icon value from SMHI to an icon that MagicMirror understands.
-	 * Uses different icons depending if its daytime or nighttime.
+	 * Map the icon value from SMHI to an icon that MagicMirror² understands.
+	 * Uses different icons depending on if its daytime or nighttime.
 	 * SMHI's description of what the numeric value means is the comment after the case.
 	 *
 	 * @param {number} input The SMHI icon value

@@ -1,4 +1,4 @@
-/* Magic Mirror Test config default weather
+/* MagicMirror² Test config default weather
  *
  * By fewieden https://github.com/fewieden
  * MIT Licensed.
@@ -11,7 +11,7 @@ let config = {
 			config: {
 				location: "Munich",
 				mockData: '"#####WEATHERDATA#####"',
-				useBeaufort: false,
+				windUnits: "beaufort",
 				showWindDirectionAsArrow: true,
 				showSun: false,
 				showHumidity: true,

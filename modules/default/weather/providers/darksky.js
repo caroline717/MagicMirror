@@ -1,6 +1,6 @@
 /* global WeatherProvider, WeatherObject */
 
-/* Magic Mirror
+/* MagicMirror²
  * Module: Weather
  * Provider: Dark Sky
  *
@@ -18,16 +18,12 @@ WeatherProvider.register("darksky", {
 
 	// Set the default config properties that is specific to this provider
 	defaults: {
-		apiBase: "https://cors-anywhere.herokuapp.com/https://api.darksky.net",
+		useCorsProxy: true,
+		apiBase: "https://api.darksky.net",
 		weatherEndpoint: "/forecast",
 		apiKey: "",
 		lat: 0,
 		lon: 0
-	},
-
-	units: {
-		imperial: "us",
-		metric: "si"
 	},
 
 	fetchCurrentWeather() {
@@ -66,13 +62,12 @@ WeatherProvider.register("darksky", {
 
 	// Create a URL from the config and base URL.
 	getUrl() {
-		const units = this.units[this.config.units] || "auto";
-		return `${this.config.apiBase}${this.config.weatherEndpoint}/${this.config.apiKey}/${this.config.lat},${this.config.lon}?units=${units}&lang=${this.config.lang}`;
+		return `${this.config.apiBase}${this.config.weatherEndpoint}/${this.config.apiKey}/${this.config.lat},${this.config.lon}?units=si&lang=${this.config.lang}`;
 	},
 
 	// Implement WeatherDay generator.
 	generateWeatherDayFromCurrentWeather(currentWeatherData) {
-		const currentWeather = new WeatherObject(this.config.units, this.config.tempUnits, this.config.windUnits, this.config.useKmh);
+		const currentWeather = new WeatherObject();
 
 		currentWeather.date = moment();
 		currentWeather.humidity = parseFloat(currentWeatherData.currently.humidity);
@@ -80,8 +75,8 @@ WeatherProvider.register("darksky", {
 		currentWeather.windSpeed = parseFloat(currentWeatherData.currently.windSpeed);
 		currentWeather.windDirection = currentWeatherData.currently.windBearing;
 		currentWeather.weatherType = this.convertWeatherType(currentWeatherData.currently.icon);
-		currentWeather.sunrise = moment(currentWeatherData.daily.data[0].sunriseTime, "X");
-		currentWeather.sunset = moment(currentWeatherData.daily.data[0].sunsetTime, "X");
+		currentWeather.sunrise = moment.unix(currentWeatherData.daily.data[0].sunriseTime);
+		currentWeather.sunset = moment.unix(currentWeatherData.daily.data[0].sunsetTime);
 
 		return currentWeather;
 	},
@@ -90,9 +85,9 @@ WeatherProvider.register("darksky", {
 		const days = [];
 
 		for (const forecast of forecasts) {
-			const weather = new WeatherObject(this.config.units, this.config.tempUnits, this.config.windUnits, this.config.useKmh);
+			const weather = new WeatherObject();
 
-			weather.date = moment(forecast.time, "X");
+			weather.date = moment.unix(forecast.time);
 			weather.minTemperature = forecast.temperatureMin;
 			weather.maxTemperature = forecast.temperatureMax;
 			weather.weatherType = this.convertWeatherType(forecast.icon);

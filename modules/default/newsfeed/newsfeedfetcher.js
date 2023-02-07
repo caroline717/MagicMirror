@@ -1,4 +1,4 @@
-/* Magic Mirror
+/* MagicMirror²
  * Node Helper: Newsfeed - NewsfeedFetcher
  *
  * By Michael Teeuw https://michaelteeuw.nl
@@ -7,8 +7,9 @@
 const Log = require("logger");
 const FeedMe = require("feedme");
 const NodeHelper = require("node_helper");
-const fetch = require("node-fetch");
+const fetch = require("fetch");
 const iconv = require("iconv-lite");
+const stream = require("stream");
 
 /**
  * Responsible for requesting an update on the set interval and broadcasting the data.
@@ -17,9 +18,10 @@ const iconv = require("iconv-lite");
  * @param {number} reloadInterval Reload interval in milliseconds.
  * @param {string} encoding Encoding of the feed.
  * @param {boolean} logFeedWarnings If true log warnings when there is an error parsing a news article.
+ * @param {boolean} useCorsProxy If true cors proxy is used for article url's.
  * @class
  */
-const NewsfeedFetcher = function (url, reloadInterval, encoding, logFeedWarnings) {
+const NewsfeedFetcher = function (url, reloadInterval, encoding, logFeedWarnings, useCorsProxy) {
 	let reloadTimer = null;
 	let items = [];
 
@@ -56,7 +58,8 @@ const NewsfeedFetcher = function (url, reloadInterval, encoding, logFeedWarnings
 					title: title,
 					description: description,
 					pubdate: pubdate,
-					url: url
+					url: url,
+					useCorsProxy: useCorsProxy
 				});
 			} else if (logFeedWarnings) {
 				Log.warn("Can't parse feed item:");
@@ -77,6 +80,19 @@ const NewsfeedFetcher = function (url, reloadInterval, encoding, logFeedWarnings
 			scheduleTimer();
 		});
 
+		parser.on("ttl", (minutes) => {
+			try {
+				// 86400000 = 24 hours is mentioned in the docs as maximum value:
+				const ttlms = Math.min(minutes * 60 * 1000, 86400000);
+				if (ttlms > reloadInterval) {
+					reloadInterval = ttlms;
+					Log.info("Newsfeed-Fetcher: reloadInterval set to ttl=" + reloadInterval + " for url " + url);
+				}
+			} catch (error) {
+				Log.warn("Newsfeed-Fetcher: feed ttl is no valid integer=" + minutes + " for url " + url);
+			}
+		});
+
 		const nodeVersion = Number(process.version.match(/^v(\d+\.\d+)/)[1]);
 		const headers = {
 			"User-Agent": "Mozilla/5.0 (Node.js " + nodeVersion + ") MagicMirror/" + global.version,
@@ -87,7 +103,13 @@ const NewsfeedFetcher = function (url, reloadInterval, encoding, logFeedWarnings
 		fetch(url, { headers: headers })
 			.then(NodeHelper.checkFetchStatus)
 			.then((response) => {
-				response.body.pipe(iconv.decodeStream(encoding)).pipe(parser);
+				let nodeStream;
+				if (response.body instanceof stream.Readable) {
+					nodeStream = response.body;
+				} else {
+					nodeStream = stream.Readable.fromWeb(response.body);
+				}
+				nodeStream.pipe(iconv.decodeStream(encoding)).pipe(parser);
 			})
 			.catch((error) => {
 				fetchFailedCallback(this, error);

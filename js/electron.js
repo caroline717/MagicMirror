@@ -8,6 +8,12 @@ const Log = require("logger");
 let config = process.env.config ? JSON.parse(process.env.config) : {};
 // Module to control application life.
 const app = electron.app;
+// If ELECTRON_DISABLE_GPU is set electron is started with --disable-gpu flag.
+// See https://www.electronjs.org/docs/latest/tutorial/offscreen-rendering for more info.
+if (process.env.ELECTRON_DISABLE_GPU !== undefined) {
+	app.disableHardwareAcceleration();
+}
+
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
@@ -97,6 +103,20 @@ function createWindow() {
 			}, 1000);
 		});
 	}
+
+	//remove response headers that prevent sites of being embedded into iframes if configured
+	mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+		let curHeaders = details.responseHeaders;
+		if (config["ignoreXOriginHeader"] || false) {
+			curHeaders = Object.fromEntries(Object.entries(curHeaders).filter((header) => !/x-frame-options/i.test(header[0])));
+		}
+
+		if (config["ignoreContentSecurityPolicy"] || false) {
+			curHeaders = Object.fromEntries(Object.entries(curHeaders).filter((header) => !/content-security-policy/i.test(header[0])));
+		}
+
+		callback({ responseHeaders: curHeaders });
+	});
 }
 
 // This method will be called when Electron has finished

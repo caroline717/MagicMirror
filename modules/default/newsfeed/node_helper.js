@@ -1,4 +1,4 @@
-/* Magic Mirror
+/* MagicMirror²
  * Node Helper: Newsfeed
  *
  * By Michael Teeuw https://michaelteeuw.nl
@@ -34,6 +34,8 @@ module.exports = NodeHelper.create({
 		const url = feed.url || "";
 		const encoding = feed.encoding || "UTF-8";
 		const reloadInterval = feed.reloadInterval || config.reloadInterval || 5 * 60 * 1000;
+		let useCorsProxy = feed.useCorsProxy;
+		if (useCorsProxy === undefined) useCorsProxy = true;
 
 		try {
 			new URL(url);
@@ -46,7 +48,7 @@ module.exports = NodeHelper.create({
 		let fetcher;
 		if (typeof this.fetchers[url] === "undefined") {
 			Log.log("Create new newsfetcher for url: " + url + " - Interval: " + reloadInterval);
-			fetcher = new NewsfeedFetcher(url, reloadInterval, encoding, config.logFeedWarnings);
+			fetcher = new NewsfeedFetcher(url, reloadInterval, encoding, config.logFeedWarnings, useCorsProxy);
 
 			fetcher.onReceive(() => {
 				this.broadcastFeeds();

@@ -1,10 +1,10 @@
-![MagicMirror²: The open source modular smart mirror platform. ](.github/header.png) 
+![MagicMirror²: The open source modular smart mirror platform. ](.github/header.png)
 
 <p style="text-align: center">
   <a href="https://choosealicense.com/licenses/mit">
 		<img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
 	</a>
-	<img src="https://img.shields.io/github/workflow/status/michmich/magicmirror/Run%20Automated%20Tests" alt="GitHub Actions">
+	<img src="https://img.shields.io/github/actions/workflow/status/michmich/magicmirror/automated-tests.yaml" alt="GitHub Actions">
 	<img src="https://img.shields.io/github/checks-status/michmich/magicmirror/master" alt="Build Status">
 	<a href="https://codecov.io/gh/MichMich/MagicMirror">
 		<img src="https://codecov.io/gh/MichMich/MagicMirror/branch/master/graph/badge.svg?token=LEG1KitZR6" alt="CodeCov Status"/>
@@ -40,7 +40,7 @@ Contributions of all kinds are welcome, not only in the form of code but also wi
 - documentation
 - translations
 
-For the full contribution guidelines, check out: [https://docs.magicmirror.builders/getting-started/contributing.html](https://docs.magicmirror.builders/getting-started/contributing.html)
+For the full contribution guidelines, check out: [https://docs.magicmirror.builders/about/contributing.html](https://docs.magicmirror.builders/about/contributing.html)
 
 ## Enjoying MagicMirror? Consider a donation!
 

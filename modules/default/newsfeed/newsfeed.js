@@ -1,4 +1,4 @@
-/* Magic Mirror
+/* MagicMirror²
  * Module: NewsFeed
  *
  * By Michael Teeuw https://michaelteeuw.nl
@@ -20,6 +20,7 @@ Module.register("newsfeed", {
 		broadcastNewsFeeds: true,
 		broadcastNewsUpdates: true,
 		showDescription: false,
+		showTitleAsUrl: false,
 		wrapTitle: true,
 		wrapDescription: true,
 		truncDescription: true,
@@ -39,6 +40,14 @@ Module.register("newsfeed", {
 		scrollLength: 500,
 		logFeedWarnings: false,
 		dangerouslyDisableAutoEscaping: false
+	},
+
+	getUrlPrefix: function (item) {
+		if (item.useCorsProxy) {
+			return location.protocol + "//" + location.host + "/cors?url=";
+		} else {
+			return "";
+		}
 	},
 
 	// Define required scripts.
@@ -141,13 +150,19 @@ Module.register("newsfeed", {
 			sourceTitle: item.sourceTitle,
 			publishDate: moment(new Date(item.pubdate)).fromNow(),
 			title: item.title,
+			url: this.getUrlPrefix(item) + item.url,
 			description: item.description,
 			items: items
 		};
 	},
 
 	getActiveItemURL: function () {
-		return typeof this.newsItems[this.activeItem].url === "string" ? this.newsItems[this.activeItem].url : this.newsItems[this.activeItem].url.href;
+		const item = this.newsItems[this.activeItem];
+		if (item) {
+			return typeof item.url === "string" ? this.getUrlPrefix(item) + item.url : this.getUrlPrefix(item) + item.url.href;
+		} else {
+			return "";
+		}
 	},
 
 	/**
